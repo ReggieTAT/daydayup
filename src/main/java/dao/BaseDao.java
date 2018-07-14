@@ -13,7 +13,7 @@ public class BaseDao {
     static{
         //数据库连接信息（必须）
         datasource.setDriverClassName("com.mysql.jdbc.Driver");
-        datasource.setUrl("jdbc:mysql://47.98.190.65/daydayup");
+        datasource.setUrl("jdbc:mysql://47.98.190.65/daydayup?useSSL=true&characterEncoding=utf8");
         datasource.setUsername("reggie2333");
         datasource.setPassword("reggie2333");
         //连接池中的连接数量配置（可选）
