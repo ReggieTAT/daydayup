@@ -102,6 +102,7 @@
         var data = tableCheck.getData();
 
         layer.confirm('确认要删除吗？'+data,function(index){
+
             //捉到所有被选中的，发异步进行删除
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
@@ -109,11 +110,27 @@
     }
     /*微语录-删除*/
     function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
+        layer.confirm('确认要删除吗？',function(index) {
+            $.ajax({
+                url: 'http://localhost:8080/admin',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    method: "deletePCard",
+                    id:id
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+                success: function (list) {  //成功执行方法
+                    //发异步删除数据
+                    if(list===1){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                    }
+                }
+            });
+        })
     }
 
 
@@ -124,7 +141,43 @@
     hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
-})();</script>
+})();
+</script>
 </body>
-
+<script >
+    $(function () {
+        $.ajax({
+            url: 'http://localhost:8080/admin',
+            type: 'GET',
+            dataType: 'json',
+            data: {method: "queryPassedCards"},
+            error: function (err) {
+                console.log(err);
+                alert(err + "error");
+            },
+            success: function (list) {  //成功执行方法
+                console.log(list);
+                $('.x-right').text("共有" + list.length + "条数据");
+                $.each(list, function (n, info) {
+                    $('.layui-table').append('<tr>' +
+                        '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
+                        '<td class="ticket-date">' + info.id + '</td>' +
+                        '<td class="ticket-departure"><img src=' + info.picture + '>' + '</td>' +
+                        '<td class="ticket-arrival">' + info.theme + '</td>' +
+                        '<td class="ticket-dpt-time">' + info.content + '</td>' +
+                        '<td class="ticket-arv-time">' + info.userName + '</td>' +
+                        '<td class="ticket-company">' + info.adminName + '</td>' +
+                        '<td id="ana' + info.id + '"><a title="删除"><i class="layui-icon">&#xe640;</i> </a>' +
+                        '</td>' +
+                        '</tr>');
+                });
+                $.each(list, function (n, item) {
+                    $('#ana' + item.id).click(function (event) {
+                        member_del(this, item.id);
+                    })
+                })
+            }
+        })
+    })
+</script>
 </html>
