@@ -119,8 +119,9 @@
                     console.log(err);
                 },
                 success: function (list) {  //成功执行方法
+                    //alert(typeof list);
                     //发异步删除数据
-                    if(list===1){
+                    if($(obj).attr('title')=='通过审核'){
                         //发异步把用户状态进行更改
                         $(obj).find('i').html('&#xe601;');
                         $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已审核');
@@ -128,16 +129,6 @@
                     }
                 }
             });
-
-            /*if($(obj).attr('title')=='审核'){
-
-                //发异步把用户状态进行更改
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已审核');
-                layer.msg('已审核!',{icon: 1,time:1000});
-
-            } */
 
         });
     }
@@ -202,6 +193,7 @@
                     console.log(list);
                     $('.x-right').text("共有"+list.length+"条数据");
                     $.each(list, function (n, info) {
+                        //var id = info.id;
                         $('.layui-table').append('<tr>' +
                             '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
                             '<td class="ticket-date">' + info.id + '</td>' +
@@ -209,7 +201,10 @@
                             '<td class="ticket-dpt-time">' + info.time + '</td>' +
                             '<td class="ticket-arv-time">' + info.theme + '</td>' +
                             '<td class="td-manage">\n' +
-                            '<a title="详情" id="anadetail' + info.id+ '"> <i class="layui-icon">&#xe642;</i></a>' +
+                            '<a title="详情" id="anadetail' + info.id+ '"><i class="layui-icon">&#xe642;</i></a>'+
+                            /*'<a title="详情" id="anadetail' + info.id+ '" onclick=x_admin_show("详情","content-detial.html?values="'+info.id+'"",600,500)'+
+                            'onclick=x_admin_show("详情","content-detial.html?values="'+info.id+'"",600,500)'+
+                        '><i class="layui-icon">&#xe642;</i></a>' +*/
                             '<a title="通过审核" id="wait' + info.id+ '"> <i class="layui-icon">&#xe601;</i></a>' +
                             '<a title="删除" id="ana' + info.id +'"><i class="layui-icon">&#xe640;</i> </a>'+
                             '</td>'+
@@ -219,13 +214,16 @@
 
                     })
                     $.each(list, function (n, item) {
-                        $('#anadetial' + item.id).click(function (event) {
-                            window.location.href = "http://localhost:8080/content-detial.html?valus=" + item.id;
+                       $('#anadetail' + item.id).click(function (event) {
+                           window.open("http://localhost:8080/content-detial.html?id=" + item.id);
+                           //openframe("http://localhost:8080/content-detial.html?id=" + item.id);
+                           /*window.location.href = "http://localhost:8080/content-detial.html?values=" + item.id;*/
                         })
                         $('#ana' + item.id).click(function (event) {
                             member_del(this, item.id);
                         })
                         $('#wait' + item.id).click(function (event) {
+                            console.log(item.id);
                             content_check(this, item.id);
                         })
 

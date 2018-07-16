@@ -6,7 +6,6 @@
     <title>上传内容详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/font.css">
     <link rel="stylesheet" href="./css/xadmin.css">
@@ -19,7 +18,7 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        body {margin:25px;}
+        body {margin:25px;width: 600px;height: 700px;}
         div.polaroid {
             width: 90%;
             background-color: white;
@@ -38,33 +37,35 @@
 <div class="x-body polaroid">
     <div class="card" style="display: block;width: 100%;height:500px;">
         <div class="triangle">
-            <div class="circle-button" id="circleDrop"><img class="close" src="images/movie.jpg"/></div>
+            <div class="circle-button" id="circleDrop">
+                <!--<img class="close" src="images/movie.jpg"/>  -->
+            </div>
         </div>
         <div class="container0" id="theme">
-            <h5 class="more">类别:电影</h5>
+         <!--   <h5 class="more">类别:电影</h5> -->
         </div>
         <div class="container0" id="from">
-            <h5 class="more">出处:《清单人生》</h5>
+           <!-- <h5 class="more">出处:《清单人生》</h5>  -->
         </div>
         <div class="container0" id="content">
-            <h5 class="more">内容:你所拥有的一切，都是你吸引而来的。我们都活在过去的行为和想法创造的世界了。</h5>
+            <!--<h5 class="more">内容:你所拥有的一切，都是你吸引而来的。我们都活在过去的行为和想法创造的世界了。</h5> -->
         </div>
 
     </div>
 </div>
 <script>
     $(function () {
-        var result;
+        var id;
         var url = window.location.search; //获取url中"?"符后的字串
         if (url.indexOf("?") != -1) {
-            result = url.substr(url.indexOf("=") + 1);
+            id = url.substr(url.indexOf("=") + 1);
         }
-        return result;
-        console.log(result);
+        console.log(typeof id+id);
+        //alert(typeof id+id);
         $.ajax({
             url: 'http://localhost:8080/admin',
             type: 'POST',
-            data: {method: "", id: result},
+            data: {method: "queryWCardDetail", id: id},
             dataType: 'json',
             timeout: 1000,
             success: function (data) {

@@ -68,7 +68,7 @@
 					<i class="fas fa-user"></i>
 					账号
 				</label>
-				<input id="name" placeholder="请输入你的账号" name="name" type="text">
+				<input id="name" placeholder="请输入你的账号" name="name" type="text" required="">
 			</div>
 			<div class="form-style-agile">
 				<label>
@@ -96,7 +96,6 @@
             $.ajax({
                 url: 'http://localhost:8080/admin',
                 type: 'GET',
-                dataType: 'json',
                 data: {
                     method:"login",
                     name: input_name,
@@ -105,19 +104,18 @@
                 timeout: 3000,
                 error:function(err){
                     console.log(err);
-                    alert(err+"error");
+                    //alert(err+"error");
                 },
                 success: function (data) {  //成功执行方法
-                    if (data===0) {
-
+                    var ndata = JSON.parse(data);
+                    //alert(typeof data+data);
+                    if (!data) {
                         alert("登录失败!账号或密码错误!");
-
                     }
                     else {
-                        console.log(data);
-                        //alert(data);
-                        //var adminname = admin.name;
-						//localStorage.setItem('adminname', adminname);
+                        var name = ndata.name;
+                        //alert(typeof name+name);
+						localStorage.setItem('name', name);
                         setInterval(delayURL, 1000);
                         //window.location.href = "http://localhost:8080/main.html";
 
