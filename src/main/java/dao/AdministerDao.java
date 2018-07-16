@@ -132,7 +132,14 @@ public class AdministerDao extends BaseDao {
      * @return
      */
     public PassedCard readPCard(String id){
-
+        PassedCard PCard=null;
+        String sql = "select * from PassedCard where Id=?";
+        try {
+            PCard=qr.query(sql,new BeanHandler<PassedCard>(PassedCard.class),id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return PCard;
     }
 
     /**
@@ -140,7 +147,16 @@ public class AdministerDao extends BaseDao {
      * @return
      */
     public int readUserNum(){
-
+        int num=0;
+        long temp;
+        String sql = "select count(Name) from User";
+        try {
+            temp=qr.query(sql,new ScalarHandler<Long>());
+            num=(int)temp;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return num;
     }
 
     /**
@@ -148,7 +164,16 @@ public class AdministerDao extends BaseDao {
      * @return
      */
     public int readPCardNum(){
-
+        int num=0;
+        long temp;
+        String sql = "select count(Id) from PassedCard";
+        try {
+            temp=qr.query(sql,new ScalarHandler<Long>());
+            num=(int)temp;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return num;
     }
 
     /**
@@ -156,6 +181,15 @@ public class AdministerDao extends BaseDao {
      * @return
      */
     public int readWCardNum(){
-
+        int num=0;
+        long temp;
+        String sql = "select count(Id) from WaitedCard";
+        try {
+            temp=qr.query(sql,new ScalarHandler<Long>());
+            num=(int)temp;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return num;
     }
 }
