@@ -47,7 +47,7 @@
             <th>ID</th>
             <th>用户名</th>
             <th>上传时间</th>
-            <th>鸡汤卡类别</th>
+            <th>主题</th>
             <th>操作</th>
             <th>状态</th>
         </tr>
@@ -107,8 +107,29 @@
     /*审核上传内容*/
     function content_check(obj,id){
         layer.confirm('确认审核通过吗？',function(index){
+            $.ajax({
+                url: 'http://localhost:8080/admin',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    method: "isPassed",
+                    id:id
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+                success: function (list) {  //成功执行方法
+                    //发异步删除数据
+                    if(list===1){
+                        //发异步把用户状态进行更改
+                        $(obj).find('i').html('&#xe601;');
+                        $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已审核');
+                        layer.msg('已审核!',{icon: 1,time:1000});
+                    }
+                }
+            });
 
-            if($(obj).attr('title')=='审核'){
+            /*if($(obj).attr('title')=='审核'){
 
                 //发异步把用户状态进行更改
                 $(obj).find('i').html('&#xe601;');
@@ -116,18 +137,34 @@
                 $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已审核');
                 layer.msg('已审核!',{icon: 1,time:1000});
 
-            }
+            } */
 
         });
     }
 
     /*-删除上传的内容*/
     function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
+        layer.confirm('确定删除未通过审核的内容吗？',function(index) {
+            $.ajax({
+                url: 'http://localhost:8080/admin',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    method: "notPassed",
+                    id:id
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+                success: function (list) {  //成功执行方法
+                    //发异步删除数据
+                    if(list===1){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                    }
+                }
+            });
+        })
     }
 
 
@@ -172,19 +209,25 @@
                             '<td class="ticket-dpt-time">' + info.time + '</td>' +
                             '<td class="ticket-arv-time">' + info.theme + '</td>' +
                             '<td class="td-manage">\n' +
-                            '<a onclick="content_check(this,\'10001\')" href="javascript:;"  title="审核">\n' +
-                            '<i class="layui-icon">&#xe601;</i>\n' +
-                            '</a>\n' +
-                            '<a title="详情"  onclick="x_admin_show(\'详情\',\'content-detial.html\',600,500)" href="javascript:;">\n' +
-                            '<i class="layui-icon">&#xe642;</i>\n' +
-                            '</a>\n' +
-                            '<a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;">\n' +
-                            '<i class="layui-icon">&#xe640;</i>\n' +
-                            '</a>\n' +
+                            '<a title="详情" id="anadetail' + info.id+ '"> <i class="layui-icon">&#xe642;</i></a>' +
+                            '<a title="通过审核" id="wait' + info.id+ '"> <i class="layui-icon">&#xe601;</i></a>' +
+                            '<a title="删除" id="ana' + info.id +'"><i class="layui-icon">&#xe640;</i> </a>'+
                             '</td>'+
                             '<td class="td-status">\n' +
                             '<span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span></td>'+
                             '</tr>');
+
+                    })
+                    $.each(list, function (n, item) {
+                        $('#anadetial' + item.id).click(function (event) {
+                            window.location.href = "http://localhost:8080/content-detial.html?valus=" + item.id;
+                        })
+                        $('#ana' + item.id).click(function (event) {
+                            member_del(this, item.id);
+                        })
+                        $('#wait' + item.id).click(function (event) {
+                            content_check(this, item.id);
+                        })
 
                     })
                 }

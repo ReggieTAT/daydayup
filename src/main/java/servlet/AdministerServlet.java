@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dao.AdministerDao;
 import javabean.Administer;
 import javabean.PassedCard;
+import javabean.User;
 import javabean.WaitedCard;
 
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "admin",urlPatterns = "/admin")
 public class AdministerServlet extends BaseServlet {
@@ -29,6 +32,7 @@ public class AdministerServlet extends BaseServlet {
         Administer admin=dao.readAccount(name);
         if (admin.getPassword().equals(password)){
             req.getSession().setAttribute("admin",admin);
+            resp.setContentType("application/json");
             resp.getWriter().write("1");
         }else{
             resp.getWriter().write("0");
