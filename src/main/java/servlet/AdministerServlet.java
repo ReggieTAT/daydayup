@@ -20,7 +20,7 @@ public class AdministerServlet extends BaseServlet {
     /**
      * 管理员登录
      * @param req 传入name password参数
-     * @param resp 验证通过返回1，否则返回0
+     * @param resp 验证通过返回admin对象的Json串，否则返回0
      * @throws Exception
      */
     public void login(HttpServletRequest req, HttpServletResponse resp)throws Exception{
@@ -29,7 +29,8 @@ public class AdministerServlet extends BaseServlet {
         Administer admin=dao.readAccount(name);
         if (admin.getPassword().equals(password)){
             req.getSession().setAttribute("admin",admin);
-            resp.getWriter().write("1");
+            String json=gson.toJson(admin);
+            resp.getWriter().write(json);
         }else{
             resp.getWriter().write("0");
         }
@@ -44,6 +45,19 @@ public class AdministerServlet extends BaseServlet {
     public void queryPassedCards(HttpServletRequest req, HttpServletResponse resp)throws Exception{
         List<PassedCard> passedCards=dao.readPCards();
         String json=gson.toJson(passedCards);
+        resp.getWriter().write(json);
+    }
+
+    /**
+     * 查询某张已审核卡片的详情
+     * @param req 传入已审核卡片的id
+     * @param resp 返回已审核卡片对象的json
+     * @throws Exception
+     */
+    public void queryPCardDetail(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        String id=req.getParameter("id");
+        PassedCard passedCard=dao.readPCard(id);
+        String json=gson.toJson(passedCard);
         resp.getWriter().write(json);
     }
 
@@ -94,7 +108,7 @@ public class AdministerServlet extends BaseServlet {
     }
 
     /**
-     * 查询待审核内容
+     * 查询全部待审核内容
      * @param req
      * @param resp 返回待审核的卡片列表
      * @throws Exception
@@ -102,6 +116,19 @@ public class AdministerServlet extends BaseServlet {
     public void queryWaitedCards(HttpServletRequest req, HttpServletResponse resp)throws Exception{
         List<WaitedCard> waitedCards=dao.readWCards();
         String json=gson.toJson(waitedCards);
+        resp.getWriter().write(json);
+    }
+
+    /**
+     * 查询某张待审核卡片的详情
+     * @param req 传入要查询的待审核卡片id
+     * @param resp 返回该卡片对象的json串
+     * @throws Exception
+     */
+    public void queryWCardDetail(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        String id=req.getParameter("id");
+        WaitedCard waitedCard=dao.readWCard(id);
+        String json=gson.toJson(waitedCard);
         resp.getWriter().write(json);
     }
 
@@ -149,4 +176,20 @@ public class AdministerServlet extends BaseServlet {
             resp.getWriter().write("0");
         }
     }
+
+    /**
+     * 统计用户数目、待审核卡片数目、已审核卡片数目
+     * @param req
+     * @param resp 返回用户数目nums的json串,数组中数字顺序同上
+     * @throws Exception
+     */
+    public void readNums(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        int userNum=dao.readUserNum();
+        int waitedCardNum=dao.readWCardNum();
+        int passedCardNum=dao.readPCardNum();
+        int[] nums={userNum,waitedCardNum,passedCardNum};
+        String json=gson.toJson(nums);
+        resp.getWriter().write(json);
+    }
+
 }

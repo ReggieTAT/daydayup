@@ -125,4 +125,37 @@ public class AdministerDao extends BaseDao {
         }
         return true;
     }
+
+    /**
+     * 读已审核的某张卡片
+     * @param id
+     * @return
+     */
+    public PassedCard readPCard(String id){
+
+    }
+
+    /**
+     * 查询用户数目
+     * @return
+     */
+    public int readUserNum(){
+
+    }
+
+    /**
+     * 查询已审核卡片数目
+     * @return
+     */
+    public int readPCardNum(){
+
+    }
+
+    /**
+     * 查询待审核卡片数目
+     * @return
+     */
+    public int readWCardNum(){
+
+    }
 }
