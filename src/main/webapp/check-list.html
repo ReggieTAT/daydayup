@@ -9,9 +9,11 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/font.css">
     <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="./css/page.css"/>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./js/page.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -52,6 +54,7 @@
             <th>状态</th>
         </tr>
         </thead>
+        <tbody id="table"></tbody>
         <!--<tbody>
         <tr>
             <td>
@@ -77,7 +80,8 @@
         </tr>
         </tbody>  -->
     </table>
-    <div class="page">
+    <ul class="page" id="page" style=""></ul>
+    <!--<div class="page">
         <div>
             <a class="prev" href="">&lt;&lt;</a>
             <span class="current">1</span>
@@ -86,7 +90,7 @@
             <a class="num" href="">10</a>
             <a class="next" href="">&gt;&gt;</a>
         </div>
-    </div>
+    </div>  -->
 
 </div>
 <script>
@@ -190,9 +194,36 @@
                     console.log(err);
                 },
                 success: function (list) {  //成功执行方法
+                    const dtable = $("#table");
                     console.log(list);
+                    const data = list;
                     $('.x-right').text("共有"+list.length+"条数据");
-                    $.each(list, function (n, info) {
+                    options = {
+                        "id": "page",//显示页码的元素
+                        "data": data,//显示数据
+                        "maxshowpageitem": 3,//最多显示的页码个数
+                        "pagelistcount": 5,//每页显示数据个数
+                        "callBack": function (list) {
+                            console.log(list);
+                            let cHtml = "";
+                            $.each(list, function (n, info) {
+                                cHtml += '<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>';
+                                cHtml += '<td class="ticket-date">' + info.id + '</td>';
+                                cHtml += '<td class="ticket-arrival">' + info.userName + '</td>';
+                                cHtml += '<td class="ticket-dpt-time">' + info.time + '</td>';
+                                cHtml += '<td class="ticket-arv-time">' + info.theme + '</td>' ;
+                                cHtml += '<td class="td-manage">\n';
+                                cHtml += '<a title="详情" id="anadetail' + info.id+ '"><i class="layui-icon">&#xe642;</i></a>';
+                                cHtml += '<a title="通过审核" id="wait' + info.id+ '"> <i class="layui-icon">&#xe601;</i></a>';
+                                cHtml += '<a title="删除" id="ana' + info.id +'"><i class="layui-icon">&#xe640;</i> </a>';
+                                cHtml += '</td><td class="td-status">\n';
+                                cHtml += '<span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span></td></tr>';
+                            })
+                            dtable.html(cHtml);//将数据增加到页面中
+                        }
+                    };
+                    page.init(data.length, 1, options);
+                    /*$.each(list, function (n, info) {
                         //var id = info.id;
                         $('.layui-table').append('<tr>' +
                             '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
@@ -202,9 +233,6 @@
                             '<td class="ticket-arv-time">' + info.theme + '</td>' +
                             '<td class="td-manage">\n' +
                             '<a title="详情" id="anadetail' + info.id+ '"><i class="layui-icon">&#xe642;</i></a>'+
-                            /*'<a title="详情" id="anadetail' + info.id+ '" onclick=x_admin_show("详情","content-detial.html?values="'+info.id+'"",600,500)'+
-                            'onclick=x_admin_show("详情","content-detial.html?values="'+info.id+'"",600,500)'+
-                        '><i class="layui-icon">&#xe642;</i></a>' +*/
                             '<a title="通过审核" id="wait' + info.id+ '"> <i class="layui-icon">&#xe601;</i></a>' +
                             '<a title="删除" id="ana' + info.id +'"><i class="layui-icon">&#xe640;</i> </a>'+
                             '</td>'+
@@ -212,12 +240,12 @@
                             '<span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span></td>'+
                             '</tr>');
 
-                    })
+                    }) */
                     $.each(list, function (n, item) {
                        $('#anadetail' + item.id).click(function (event) {
-                           window.open("http://localhost:8080/content-detial.html?id=" + item.id);
-                           //openframe("http://localhost:8080/content-detial.html?id=" + item.id);
-                           /*window.location.href = "http://localhost:8080/content-detial.html?values=" + item.id;*/
+                           window.open ("http://localhost:8080/content-detial.html?id=" + item.id, 'newwindow', 'height=680, width=650, top=100,left=200, toolbar=yes,menubar=no, scrollbars=no, resizable=no,location=no, status=no') ;
+                           //window.open("http://localhost:8080/content-detial.html?id=" + item.id);
+                           //window.location.href = "http://localhost:8080/content-detial.html?id=" + item.id;
                         })
                         $('#ana' + item.id).click(function (event) {
                             member_del(this, item.id);
