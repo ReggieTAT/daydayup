@@ -29,12 +29,10 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="上传开始日" name="start" id="start">
-            <input class="layui-input" placeholder="上传截止日" name="end" id="end">
-            <input type="text" name="username"  placeholder="请输入微语录类别" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
+        <div class="layui-form layui-col-md12 x-so">
+            <input type="text" id="wait-id" name="id"  placeholder="请输入微语录ID" autocomplete="off" class="layui-input">
+            <button class="layui-btn" id="wait-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </div>
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
@@ -223,24 +221,6 @@
                         }
                     };
                     page.init(data.length, 1, options);
-                    /*$.each(list, function (n, info) {
-                        //var id = info.id;
-                        $('.layui-table').append('<tr>' +
-                            '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
-                            '<td class="ticket-date">' + info.id + '</td>' +
-                            '<td class="ticket-arrival">' + info.userName + '</td>' +
-                            '<td class="ticket-dpt-time">' + info.time + '</td>' +
-                            '<td class="ticket-arv-time">' + info.theme + '</td>' +
-                            '<td class="td-manage">\n' +
-                            '<a title="详情" id="anadetail' + info.id+ '"><i class="layui-icon">&#xe642;</i></a>'+
-                            '<a title="通过审核" id="wait' + info.id+ '"> <i class="layui-icon">&#xe601;</i></a>' +
-                            '<a title="删除" id="ana' + info.id +'"><i class="layui-icon">&#xe640;</i> </a>'+
-                            '</td>'+
-                            '<td class="td-status">\n' +
-                            '<span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span></td>'+
-                            '</tr>');
-
-                    }) */
                     $.each(list, function (n, item) {
                        $('#anadetail' + item.id).click(function (event) {
                            window.open ("http://localhost:8080/content-detial.html?id=" + item.id, 'newwindow', 'height=680, width=650, top=100,left=200, toolbar=yes,menubar=no, scrollbars=no, resizable=no,location=no, status=no') ;
@@ -258,6 +238,52 @@
                     })
                 }
             });
+        $('#wait-btn').click(function (event) {
+            var id = $("#wait-id").val();
+            //console.log(id+typeof id);
+            $.ajax({
+                url: 'http://localhost:8080/admin',
+                type: 'POST',
+                dataType:'json',
+                data: {method: "queryWCardDetail", id: id},
+                error:function(err){
+                    console.log(err);
+                    alert(err+"error");
+                },
+                success: function (data) {  //成功执行方法
+                    if(!data){
+                        alert("该鸡汤卡不存在！");
+                    }else{
+                        $('#table').remove(); //删除上一次的搜索结果
+                        console.log(data+typeof data);
+                        $('.x-right').text("共有1条数据");
+                        $('.layui-table').append('<tr class="info">' +
+                            '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
+                            '<td class="ticket-date">' + data.id + '</td>' +
+                            '<td class="ticket-arrival">' + data.userName + '</td>' +
+                            '<td class="ticket-dpt-time">' + data.time + '</td>' +
+                            '<td class="ticket-arv-time">' + data.theme + '</td>' +
+                            '<td class="td-manage"><a title="详情" id="anadetail' + data.id+ '"><i class="layui-icon">&#xe642;</i></a>'+
+                            '<a title="通过审核" id="wait' + data.id+ '"> <i class="layui-icon">&#xe601;</i></a>'+
+                            '<a title="删除" id="ana' + data.id +'"><i class="layui-icon">&#xe640;</i> </a>'+
+                            '</td><td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini">未审核</span></td></tr>');
+                        $('#anadetail' + data.id).click(function (event) {
+                            window.open ("http://localhost:8080/content-detial.html?id=" + data.id, 'newwindow', 'height=680, width=650, top=100,left=200, toolbar=yes,menubar=no, scrollbars=no, resizable=no,location=no, status=no') ;
+                            //window.open("http://localhost:8080/content-detial.html?id=" + item.id);
+                            //window.location.href = "http://localhost:8080/content-detial.html?id=" + item.id;
+                        })
+                        $('#ana' + data.id).click(function (event) {
+                            member_del(this, data.id);
+                        })
+                        $('#wait' + data.id).click(function (event) {
+                            console.log(data.id);
+                            content_check(this, data.id);
+                        })
+                    }
+
+                }
+            });
+        })
     })
 </script>
 </body>

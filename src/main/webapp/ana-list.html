@@ -30,7 +30,7 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input type="text" id="pass-id" name="username"  placeholder="请输入要查找的ID" autocomplete="off" class="layui-input">
+            <input type="text" id="pass-id" name="id"  placeholder="请输入要查找的ID" autocomplete="off" class="layui-input">
             <button class="layui-btn"  id="pass-btn"  lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
 
         </form>
@@ -172,7 +172,6 @@
             $.ajax({
                 url: 'http://localhost:8080/admin',
                 type: 'POST',
-                dataType: 'json',
                 data: {method:"queryPCardDetail",id:id},
                 error:function(err){
                     console.log(err);
