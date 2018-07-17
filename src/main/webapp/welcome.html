@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>欢迎页面</title>
@@ -10,11 +10,17 @@
         <link rel="stylesheet" href="./css/xadmin.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     </head>
+    <style>
+        .layui-col-xs2 {
+            width: 33%;
+            text-align: center;
+        }
+    </style>
     <body>
     <div class="x-body layui-anim layui-anim-up">
 
         <blockquote class="layui-elem-quote">欢迎管理员：
-            <span class="x-red" id="username"></span>！当前时间:<span id="time"></span></blockquote>
+            <span class="x-red" id="username"></span>当前时间:<span id="time"></span></blockquote>
         <fieldset class="layui-elem-field">
             <legend>数据统计</legend>
             <div class="layui-field-box">
@@ -45,27 +51,6 @@
                                                     <cite id="user-num"></cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>商品数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>6766</cite></p>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -81,12 +66,7 @@
                     <tbody>
                         <tr>
                             <td >
-                                <a class="x-a" href="/" target="_blank">新版x-admin 2.0上线了</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                <a class="x-a" href="/" target="_blank">交流qq群:(519492808)</a>
+                                <a class="x-a" href="/" target="_blank">新版 2.0即将上线！敬请期待！</a>
                             </td>
                         </tr>
                     </tbody>
@@ -142,17 +122,17 @@
                     <tbody>
                         <tr>
                             <th>版权所有</th>
-                            <td>xxxxx(xxxx)
-                                <a href="http://www.xxx.com/" class='x-a' target="_blank">访问官网</a></td>
+                            <td>更多休闲娱乐 尽在休闲娱乐平台
+                                <a href="/" class='x-a' target="_blank">访问网站</a></td>
                         </tr>
                         <tr>
                             <th>开发者</th>
-                            <td>马志斌(113664000@qq.com)</td></tr>
+                            <td>茅旭辉 朱童 陈紫薇 朱洁 李志玲</td></tr>
                     </tbody>
                 </table>
             </div>
         </fieldset>
-        <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>
+        <!--<blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote> -->
     </div>
 
         <script>
@@ -190,7 +170,7 @@
         $(function () {
             const name = localStorage.getItem("name");
             if (name) { // 已登入
-                $('#username').text(name); // 显示用户名
+                $('#username').text(name+"!"); // 显示用户名
             } else { // 未登录
                 $('#username').text('');
             }
