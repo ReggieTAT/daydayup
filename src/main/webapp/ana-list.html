@@ -30,8 +30,8 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input type="text" name="username"  placeholder="请输入要查找的ID/主题/作者" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input type="text" id="pass-id" name="username"  placeholder="请输入要查找的ID" autocomplete="off" class="layui-input">
+            <button class="layui-btn"  id="pass-btn"  lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
 
         </form>
     </div>
@@ -54,30 +54,7 @@
         </tr>
         </thead>
         <tbody id="table"></tbody>
-        <!--<tbody>
-        <tr>
-            <td>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td><img src="images/movie.jpg"></td>
-            <td>电影</td>
-            <td>你所拥有的一切，都是你吸引而来的。我们都活在过去的行为和想法创造的世界了</td>
-            <td>小明</td>
-            <td>admin</td>
-        </tr>
-        </tbody>  -->
     </table>
-    <!--<div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <span class="current">1</span>
-            <a class="num" href="">2</a>
-            <a class="num" href="">...</a>
-            <a class="num" href="">10</a>
-            <a class="next" href="">&gt;&gt;</a>
-        </div>
-    </div>  -->
     <ul class="page" id="page" style=""></ul>
 
 </div>
@@ -189,6 +166,39 @@
                     page.init(data.length, 1, options);
                 }
             });
+        $('#pass-btn').click(function (event) {
+            var id = $("#pass-id").val();
+            //console.log(id+typeof id);
+            $.ajax({
+                url: 'http://localhost:8080/admin',
+                type: 'POST',
+                dataType: 'json',
+                data: {method:"queryPCardDetail",id:id},
+                error:function(err){
+                    console.log(err);
+                    alert(err+"error");
+                },
+                success: function (list) {  //成功执行方法
+                    if(!list){
+                        alert("不存在该用户！");
+                    }else{
+                        $('#table').remove(); //删除上一次的搜索结果
+                        console.log(list);
+                        $('.x-right').text("共有"+list.length+"条数据");
+                        console.log(list);
+                        $('.layui-table').append('<tr class="info">' +
+                            '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
+                            '<td class="ticket-date">' + list.id + '</td>' +
+                            '<td class="ticket-departure"><img src=' + list.picture + '>'+'</td>' +
+                            '<td class="ticket-arrival">' + list.theme + '</td>' +
+                            '<td class="ticket-dpt-time">' + list.content + '</td>' +
+                            '<td class="ticket-arv-time">' + list.userName + '</td>' +
+                            '<td class="ticket-company">' + list.adminName + '</td>' + '</tr>');
+                    }
+                }
+            });
+        })
+
     })
 </script>
 </body>
