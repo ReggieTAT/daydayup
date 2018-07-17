@@ -9,9 +9,11 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./css/font.css">
     <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="./css/page.css"/>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./js/page.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -37,9 +39,9 @@
 
         <span class="x-right" style="line-height:40px"></span>
     </xblock>
-    <table class="layui-table">
-        <thead>
-        <tr>
+    <table class="layui-table" >
+        <thead >
+        <tr >
             <th>
                 <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
             </th>
@@ -51,6 +53,7 @@
             <th>审核员</th>
         </tr>
         </thead>
+        <tbody id="table"></tbody>
         <!--<tbody>
         <tr>
             <td>
@@ -65,7 +68,7 @@
         </tr>
         </tbody>  -->
     </table>
-    <div class="page">
+    <!--<div class="page">
         <div>
             <a class="prev" href="">&lt;&lt;</a>
             <span class="current">1</span>
@@ -74,7 +77,8 @@
             <a class="num" href="">10</a>
             <a class="next" href="">&gt;&gt;</a>
         </div>
-    </div>
+    </div>  -->
+    <ul class="page" id="page" style=""></ul>
 
 </div>
 <script>
@@ -149,22 +153,40 @@
                     alert(err+"error");
                 },
                 success: function (list) {  //成功执行方法
-
-                    //alert(list);
+                    const dtable = $("#table");
                     console.log(list);
-                    //console.log(data.length);
                     $('.x-right').text("共有"+list.length+"条数据");
-                    $.each(list, function (n, info) {
-                        $('.layui-table').append('<tr>' +
-                            '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
-                            '<td class="ticket-date">' + info.id + '</td>' +
-                            '<td class="ticket-departure"><img src=' + info.picture + '>'+'</td>' +
-                            '<td class="ticket-arrival">' + info.theme + '</td>' +
-                            '<td class="ticket-dpt-time">' + info.content + '</td>' +
-                            '<td class="ticket-arv-time">' + info.userName + '</td>' +
-                            '<td class="ticket-company">' + info.adminName + '</td>' +
-                            '</tr>');
-                    })
+                    const data = list;
+                    options = {
+                        "id": "page",//显示页码的元素
+                        "data": data,//显示数据
+                        "maxshowpageitem": 3,//最多显示的页码个数
+                        "pagelistcount": 5,//每页显示数据个数
+                        "callBack": function (list) {
+                            console.log(list);
+                            let cHtml = "";
+                            $.each(list, function (n, info) {
+                                cHtml += '<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>';
+                                cHtml += '<td class="ticket-date">' + info.id + '</td>';
+                                cHtml += '<td class="ticket-departure"><img src=' + info.picture + '>'+'</td>';
+                                cHtml += '<td class="ticket-arrival">' + info.theme + '</td>';
+                                cHtml += '<td class="ticket-dpt-time">' + info.content + '</td>';
+                                cHtml += '<td class="ticket-arv-time">' + info.userName + '</td>';
+                                cHtml += '<td class="ticket-company">' + info.adminName + '</td></tr>';
+                                /*$('.layui-table').append('<tr>' +
+                                    '<td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="2"><i class="layui-icon">&#xe605;</i></div>' +
+                                    '<td class="ticket-date">' + info.id + '</td>' +
+                                    '<td class="ticket-departure"><img src=' + info.picture + '>'+'</td>' +
+                                    '<td class="ticket-arrival">' + info.theme + '</td>' +
+                                    '<td class="ticket-dpt-time">' + info.content + '</td>' +
+                                    '<td class="ticket-arv-time">' + info.userName + '</td>' +
+                                    '<td class="ticket-company">' + info.adminName + '</td>' +
+                                    '</tr>'); */
+                            })
+                            dtable.html(cHtml);//将数据增加到页面中
+                        }
+                    };
+                    page.init(data.length, 1, options);
                 }
             });
     })
