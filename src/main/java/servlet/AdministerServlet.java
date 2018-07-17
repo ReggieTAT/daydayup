@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dao.AdministerDao;
 import javabean.Administer;
 import javabean.PassedCard;
+import javabean.User;
 import javabean.WaitedCard;
 
 import javax.servlet.annotation.WebServlet;
@@ -192,4 +193,64 @@ public class AdministerServlet extends BaseServlet {
         resp.getWriter().write(json);
     }
 
+    /**
+     * 读取全部用户信息
+     * @param req
+     * @param resp 返回用户列表的Json串
+     * @throws Exception
+     */
+    public void readAllUsers(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        List<User> users=dao.readUsers();
+        String json=gson.toJson(users);
+        resp.getWriter().write(json);
+    }
+
+    /**
+     * 添加用户账户
+     * @param req 传入用户name,password
+     * @param resp 添加成功返回用户对象的json，否则返回0
+     * @throws Exception
+     */
+    public void addUser(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        String name=req.getParameter("name");
+        String password=req.getParameter("password");
+        User user=new User();
+        user.setName(name);
+        user.setPassword(password);
+        if (dao.addUser(user)){
+            String json=gson.toJson(user);
+            resp.getWriter().write(json);
+        }else {
+            resp.getWriter().write("0");
+        }
+    }
+
+    /**
+     * 删除用户账户
+     * @param req 传入用户name
+     * @param resp 成功返回1，否则返回0
+     * @throws Exception
+     */
+    public void deleteUser(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        String name=req.getParameter("name");
+        if (dao.deleteUser(name)){
+            resp.getWriter().write("1");
+        }else {
+            resp.getWriter().write("0");
+        }
+    }
+
+    /**
+     * 查询用户信息
+     * @param req 传入用户name
+     * @param resp 返回用户对象的json，不存在则返回0
+     * @throws Exception
+     */
+    public void queryUser(HttpServletRequest req,HttpServletResponse resp)throws Exception{
+        String name=req.getParameter("name");
+        User user=dao.readUser(name);
+            String json=gson.toJson(user);
+            resp.getWriter().write(json);
+
+    }
 }

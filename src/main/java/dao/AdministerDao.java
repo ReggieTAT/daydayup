@@ -193,4 +193,68 @@ public class AdministerDao extends BaseDao {
         }
         return num;
     }
+
+    /**
+     * 读用户列表
+     * @return
+     */
+    public List<User> readUsers(){
+        List<User> userList = new ArrayList<>();
+        String sql="select * from User";
+        try {
+            userList=(List<User>) qr.query(sql,new BeanListHandler<User>(User.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
+    /**
+     * 添加用户账户
+     * @param user
+     * @return
+     */
+    public boolean addUser(User user){
+        String sql = "insert into User values(?,?)";
+        try {
+            Object[] params = {user.getName(),user.getPassword()};
+            qr.update(sql, params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 删除用户账户
+     * @param name
+     * @return
+     */
+    public boolean deleteUser(String name){
+        String sql = "delete from User where Name=?";
+        try {
+            qr.update(sql, name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 查询某个用户的信息
+     * @param name
+     * @return 查到时返回用户对象，否则返回null
+     */
+    public User readUser(String name){
+        User user=null;
+        String sql = "select * from User where Name=?";
+        try {
+            user=qr.query(sql,new BeanHandler<User>(User.class),name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 }
