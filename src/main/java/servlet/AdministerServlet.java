@@ -84,7 +84,7 @@ public class AdministerServlet extends BaseServlet {
         passedCard.setTheme(theme);
         passedCard.setTime(time);
         passedCard.setAdminName(admin.getName());
-        passedCard.setUserName(admin.getName());
+        passedCard.setUserName("admin");
         if (dao.addPCard(passedCard)){
             resp.getWriter().write("1");
         }else {
