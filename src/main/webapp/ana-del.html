@@ -114,7 +114,7 @@
     function member_del(obj,id){
         layer.confirm('确认要删除吗？',function(index) {
             $.ajax({
-                url: 'http://localhost:8080/admin',
+                url: 'http://47.98.190.65:8080/daydayup/admin',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -149,7 +149,7 @@
 <script >
     $(function () {
         $.ajax({
-            url: 'http://localhost:8080/admin',
+            url: 'http://47.98.190.65:8080/daydayup/admin',
             type: 'GET',
             dataType: 'json',
             data: {method: "queryPassedCards"},
