@@ -20,7 +20,7 @@ public class BaseServlet extends HttpServlet {
             HttpServletRequest httpRequest = (HttpServletRequest) req;
             HttpServletResponse httpResponse = (HttpServletResponse) res;
             method.invoke(this, httpRequest, httpResponse);
-            httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+            //httpResponse.addHeader("Access-Control-Allow-Origin", "*");
         } catch (Exception e) {
             e.printStackTrace();
         }
