@@ -56,7 +56,7 @@ public class UserDao extends BaseDao {
         String sql = "insert into WaitedCard values(?,?,?,?,?,?,?)";
         try {
             Object[] params = {waitedCard.getId(),waitedCard.getContent(),waitedCard.getSource(),
-                    waitedCard.getPicture(),waitedCard.getTheme(),waitedCard.getTime(),waitedCard.getTime()};
+                    waitedCard.getPicture(),waitedCard.getTheme(),waitedCard.getTime(),waitedCard.getUserName()};
             qr.update(sql, params);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class UserDao extends BaseDao {
      * @return
      */
     public boolean changePraise(String id,int num){
-        String sql = "UPDATE PassedCard SET Praise=? WHERE Id=?)";
+        String sql = "UPDATE PassedCard SET Praise=? WHERE Id=?";
         try {
             Object[] params = {num,id};
             qr.update(sql, params);
