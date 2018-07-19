@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @WebServlet(name = "user",urlPatterns = "/user")
 public class UserServlet extends BaseServlet{
@@ -47,8 +48,8 @@ public class UserServlet extends BaseServlet{
         String name=req.getParameter("name");
         String password=req.getParameter("password");
         User user=dao.readAccount(name);
-        if (user.getPassword().equals(password)){
-            req.getSession().setAttribute("user",user);
+        if (user != null && user.getPassword().equals(password)) {
+            req.getSession(true).setAttribute("user", user);
             resp.getWriter().write("1");
         }else {
             resp.getWriter().write("0");
@@ -68,8 +69,14 @@ public class UserServlet extends BaseServlet{
         String theme=req.getParameter("theme");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd");
         String time=sdf.format(new Date());
-        String id=String.valueOf(content.hashCode());
-        User user= (User) req.getSession().getAttribute("user");
+        String id = Integer.toString(new Random().nextInt(10000000));
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null) {
+            resp.getWriter().write("0");
+            System.err.println("User has not logged in");
+            return;
+        }
+
         WaitedCard waitedCard=new WaitedCard();
         waitedCard.setId(id);
         waitedCard.setContent(content);

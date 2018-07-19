@@ -1,6 +1,9 @@
 package javabean;
+
+import java.io.Serializable;
+
 //角色父类
-public class Character {
+public class Character implements Serializable {
     private String name;
     private String password;
 

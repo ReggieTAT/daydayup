@@ -53,7 +53,8 @@ public class UserDao extends BaseDao {
      * @return
      */
     public boolean addWCard(WaitedCard waitedCard){
-        String sql = "insert into WaitedCard values(?,?,?,?,?,?,?)";
+        //language=SQL
+        String sql = "insert into WaitedCard (Id, Content, Source, Picture, Theme, Time, UserName) values (?, ?, ?, ?, ?, ?, ?); ";
         try {
             Object[] params = {waitedCard.getId(),waitedCard.getContent(),waitedCard.getSource(),
                     waitedCard.getPicture(),waitedCard.getTheme(),waitedCard.getTime(),waitedCard.getUserName()};
